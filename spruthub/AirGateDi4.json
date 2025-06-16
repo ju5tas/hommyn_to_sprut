@@ -1,0 +1,125 @@
+{
+  "manufacturer": "Rusklimat",
+  "name": "Electrolux Air Gate",
+  "model": "Air Gate DI 4.0",
+  "modelId": "rusclimate/46/([0-9a-z]+)/state/mode",
+  "services": [
+    {
+      "type": "Thermostat",
+      "name": "Обогреватель",
+      "characteristics": [
+        {
+          "type": "CurrentTemperature",
+          "link": {
+            "type": "Double",
+            "topicGet": "rusclimate/46/(1)/state/sensor/temperature"
+          }
+        },
+        {
+          "type": "TargetTemperature",
+          "link": {
+            "type": "Integer",
+            "topicGet": "rusclimate/46/(1)/state/temperature",
+            "topicSet": "rusclimate/46/(1)/control/temperature"
+          },
+          "minValue": 5,
+          "maxValue": 35,
+          "minStep": 1
+        },
+        {
+          "type": "CurrentHeatingCoolingState",
+          "link": {
+            "type": "Integer",
+            "topicGet": "rusclimate/46/(1)/state/mode",
+            "map": {
+              "OFF": "0",
+              "HEAT": "1"
+            }
+          },
+          "validValues": "OFF, HEAT"
+        },
+        {
+          "type": "TargetHeatingCoolingState",
+          "link": {
+            "type": "Integer",
+            "topicGet": "rusclimate/46/(1)/state/mode",
+            "topicSet": "rusclimate/46/(1)/control/mode",
+            "map": {
+              "OFF": "0",
+              "HEAT": "1"
+            },
+            "outMap": {
+              "OFF": "0",
+              "HEAT": "1"
+            }
+          },
+          "validValues": "OFF, HEAT"
+        },
+        {
+          "type": "CurrentPosition",
+          "link": {
+            "type": "Integer",
+            "inFunc": "parseInt(value[1], 16) * 10",
+            "topicGet": "rusclimate/46/(1)/state/program_data/0"
+          }
+        }
+      ]
+    }
+  ],
+  "options":
+  [
+    {
+      "link": {
+            "topicGet": "rusclimate/46/(1)/state/backlight",
+            "topicSet": "rusclimate/46/(1)/control/backlight",
+            "map": {
+              "false": "0",
+              "true": "1"              
+            }
+      },
+      "type": "Boolean",
+      "name":  "Подсветка дисплея"
+    },
+    {
+      "link": {
+            "topicGet": "rusclimate/46/(1)/state/volume",
+            "topicSet": "rusclimate/46/(1)/control/volume",
+            "map": {
+              "false": "0",
+              "true": "1"              
+            }
+      },
+      "type": "Boolean",
+      "name":  "Звук кнопок"
+    },
+    {
+      "link": {
+            "topicGet": "rusclimate/46/(1)/state/child_lock",
+            "topicSet": "rusclimate/46/(1)/control/child_lock"
+      },
+      "type": "Boolean",
+      "name":  "Блокировка от детей"
+    },
+    {
+      "link": {
+            "topicGet": "rusclimate/46/(1)/state/damper",
+            "topicSet": "rusclimate/46/(1)/control/damper"
+      },
+      "type": "Boolean",
+      "name":  "Обнаружение открытого окна"
+    },
+    {
+      "link": {
+            "topicGet": "rusclimate/46/(1)/state/program_data/0",
+            "topicSet": "rusclimate/46/(1)/control/program_data/0",
+            "inFunc": "value[3] == '1'",
+            "outMap":{
+              "false": "000000",
+              "true": "000100"
+            }
+      },
+      "type": "Boolean",
+      "name":  "Автоотключение дисплея"
+    }
+  ]
+}

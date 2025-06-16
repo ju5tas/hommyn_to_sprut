@@ -1,0 +1,16 @@
+services:
+  mosquitto-tls-legacy:
+    container_name: mosquitto-tls-legacy
+    image: eclipse-mosquitto:1.5.11
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - ./config/config:/mosquitto/config
+      - ./config/data:/mosquitto/data
+      - ./config/log:/mosquitto/log
+      - ./config/certs:/mosquitto/certs
+    environment:
+      - TZ=Europe/Moscow
+    network_mode: host
+    logging:
+      driver: none
