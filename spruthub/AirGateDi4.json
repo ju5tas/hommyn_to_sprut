@@ -2,7 +2,7 @@
   "manufacturer": "Rusklimat",
   "name": "Electrolux Air Gate",
   "model": "Air Gate DI 4.0",
-  "modelId": "rusclimate/46/([0-9a-z]+)/state/mode",
+  "modelId": "rusclimate/([0-9]+)/([0-9a-fA-F]+)/state/mode",
   "services": [
     {
       "type": "Thermostat",
@@ -12,15 +12,15 @@
           "type": "CurrentTemperature",
           "link": {
             "type": "Double",
-            "topicGet": "rusclimate/46/(1)/state/sensor/temperature"
+            "topicGet": "rusclimate/(1)/(2)/state/sensor/temperature"
           }
         },
         {
           "type": "TargetTemperature",
           "link": {
             "type": "Integer",
-            "topicGet": "rusclimate/46/(1)/state/temperature",
-            "topicSet": "rusclimate/46/(1)/control/temperature"
+            "topicGet": "rusclimate/(1)/(2)/state/temperature",
+            "topicSet": "rusclimate/(1)/(2)/control/temperature"
           },
           "minValue": 5,
           "maxValue": 35,
@@ -30,10 +30,10 @@
           "type": "CurrentHeatingCoolingState",
           "link": {
             "type": "Integer",
-            "topicGet": "rusclimate/46/(1)/state/mode",
+            "topicGet": "rusclimate/(1)/(2)/state/mode",
             "map": {
               "OFF": "0",
-              "HEAT": "1"
+              "HEAT": "1~4"
             }
           },
           "validValues": "OFF, HEAT"
@@ -42,11 +42,11 @@
           "type": "TargetHeatingCoolingState",
           "link": {
             "type": "Integer",
-            "topicGet": "rusclimate/46/(1)/state/mode",
-            "topicSet": "rusclimate/46/(1)/control/mode",
+            "topicGet": "rusclimate/(1)/(2)/state/mode",
+            "topicSet": "rusclimate/(1)/(2)/control/mode",
             "map": {
               "OFF": "0",
-              "HEAT": "1"
+              "HEAT": "1~4"
             },
             "outMap": {
               "OFF": "0",
@@ -59,8 +59,61 @@
           "type": "CurrentPosition",
           "link": {
             "type": "Integer",
-            "inFunc": "parseInt(value[1], 16) * 10",
-            "topicGet": "rusclimate/46/(1)/state/program_data/0"
+            "topicGet": "rusclimate/(1)/(2)/state/program_data/0",
+            "inFunc": "parseInt(value[1], 16) * 10"
+          }
+        },
+        {
+          "type": "TargetPosition",
+          "link": {
+            "type": "Integer",
+            "topicGet": "rusclimate/(1)/(2)/state/speed",
+            "inFunc": "parseInt(value) * 10",
+            "topicSet": "rusclimate/(1)/(2)/control/speed",
+            "outFunc": "parseInt(value / 10)"
+          },
+          "minValue": 0,
+          "maxValue": 100,
+          "minStep": 10
+        }
+      ]
+    },
+    {
+      "name": "Режим антизамерзания",
+      "type": "Switch",
+      "visible": false,
+      "characteristics": [
+        {
+          "type": "On",
+          "link": {
+            "type": "Integer",
+            "topicGet": "rusclimate/(1)/(2)/state/mode",
+            "topicSet": "rusclimate/(1)/(2)/control/mode",
+            "inFunc": "value == '3'",
+            "outMap":{
+              "false": "1",
+              "true": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ECO режим",
+      "type": "Switch",
+      "visible": false,
+      "characteristics": [
+        {
+          "type": "On",
+          "link": {
+            "type": "Integer",
+            "topicGet": "rusclimate/(1)/(2)/state/mode",
+            "topicSet": "rusclimate/(1)/(2)/control/mode",
+            "inFunc": "value == '2'",
+            "outMap":{
+              "false": "1",
+              "true": "2"
+            }
           }
         }
       ]
@@ -70,8 +123,8 @@
   [
     {
       "link": {
-            "topicGet": "rusclimate/46/(1)/state/backlight",
-            "topicSet": "rusclimate/46/(1)/control/backlight",
+            "topicGet": "rusclimate/(1)/(2)/state/backlight",
+            "topicSet": "rusclimate/(1)/(2)/control/backlight",
             "map": {
               "false": "0",
               "true": "1"              
@@ -82,8 +135,8 @@
     },
     {
       "link": {
-            "topicGet": "rusclimate/46/(1)/state/volume",
-            "topicSet": "rusclimate/46/(1)/control/volume",
+            "topicGet": "rusclimate/(1)/(2)/state/volume",
+            "topicSet": "rusclimate/(1)/(2)/control/volume",
             "map": {
               "false": "0",
               "true": "1"              
@@ -94,24 +147,24 @@
     },
     {
       "link": {
-            "topicGet": "rusclimate/46/(1)/state/child_lock",
-            "topicSet": "rusclimate/46/(1)/control/child_lock"
+            "topicGet": "rusclimate/(1)/(2)/state/child_lock",
+            "topicSet": "rusclimate/(1)/(2)/control/child_lock"
       },
       "type": "Boolean",
       "name":  "Блокировка от детей"
     },
     {
       "link": {
-            "topicGet": "rusclimate/46/(1)/state/damper",
-            "topicSet": "rusclimate/46/(1)/control/damper"
+            "topicGet": "rusclimate/(1)/(2)/state/damper",
+            "topicSet": "rusclimate/(1)/(2)/control/damper"
       },
       "type": "Boolean",
       "name":  "Обнаружение открытого окна"
     },
     {
       "link": {
-            "topicGet": "rusclimate/46/(1)/state/program_data/0",
-            "topicSet": "rusclimate/46/(1)/control/program_data/0",
+            "topicGet": "rusclimate/(1)/(2)/state/program_data/0",
+            "topicSet": "rusclimate/(1)/(2)/control/program_data/0",
             "inFunc": "value[3] == '1'",
             "outMap":{
               "false": "000000",
@@ -120,6 +173,59 @@
       },
       "type": "Boolean",
       "name":  "Автоотключение дисплея"
+    },
+    {
+      "type": "Integer",
+      "name": "Разница температур в режиме Eco",
+      "link": {
+        "type": "String",
+        "topicGet": "rusclimate/(1)/(2)/state/program_data/2",
+        "topicSet": "rusclimate/(1)/(2)/control/program_data/2",
+        "inFunc": "parseInt(value)",
+        "outFunc": "value < 10 ? '0' + value : String(value)"
+      },
+      "minValue": 3,
+      "maxValue": 7
+    },
+    {
+      "type": "Integer",
+      "name": "Температура в режиме Anti frost",
+      "link": {
+        "type": "String",
+        "topicGet": "rusclimate/(1)/(2)/state/program_data/3",
+        "topicSet": "rusclimate/(1)/(2)/control/program_data/3",
+        "inFunc": "parseInt(value)",
+        "outFunc": "value < 10 ? '0' + value : String(value)"
+      },
+      "minValue": 3,
+      "maxValue": 7
+    },
+    {
+      "name": "Версия FW модуля",
+      "type": "String",
+      "link": {
+        "type": "Double",
+        "topicGet": "rusclimate/(1)/(2)/state/firmware"
+      },
+      "inputType": "STATUS"
+    },
+    {
+      "name": "Ошибка связи с бойлером",
+      "type": "Boolean",
+      "link": {
+        "type": "Boolean",
+        "topicGet": "rusclimate/(1)/(2)/state/error/connection"
+      },
+      "inputType": "STATUS"
+    },
+    {
+      "name": "Код ошибки",
+      "type": "String",
+      "link": {
+        "type": "Double",
+        "topicGet": "rusclimate/(1)/(2)/state/error/code"
+      },
+      "inputType": "STATUS"
     }
   ]
 }
