@@ -117,6 +117,21 @@
           }
         }
       ]
+    },
+    {
+      "name": "Блокировка от детей",
+      "type": "Switch",
+      "visible": false,
+      "characteristics": [
+        {
+          "type": "On",
+          "link": {
+                "type": "Boolean",
+                "topicGet": "rusclimate/(1)/(2)/state/child_lock",
+                "topicSet": "rusclimate/(1)/(2)/control/child_lock"
+          }
+        }
+      ]
     }
   ],
   "options":
@@ -131,7 +146,7 @@
             }
       },
       "type": "Boolean",
-      "name":  "Подсветка дисплея"
+      "name":  "Яркость дисплея 50%"
     },
     {
       "link": {
@@ -144,14 +159,6 @@
       },
       "type": "Boolean",
       "name":  "Звук кнопок"
-    },
-    {
-      "link": {
-            "topicGet": "rusclimate/(1)/(2)/state/child_lock",
-            "topicSet": "rusclimate/(1)/(2)/control/child_lock"
-      },
-      "type": "Boolean",
-      "name":  "Блокировка от детей"
     },
     {
       "link": {
@@ -210,7 +217,7 @@
       "inputType": "STATUS"
     },
     {
-      "name": "Ошибка связи с бойлером",
+      "name": "Ошибка связи",
       "type": "Boolean",
       "link": {
         "type": "Boolean",
